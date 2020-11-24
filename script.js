@@ -1,23 +1,18 @@
-const pressed = [];
-const secretCode = 'julia';
+const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
 
-window.addEventListener('keyup', (e)=> {
-	console.log(e.key);
-	pressed.push(e.key);
-	pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
-	if(pressed.join("").includes(secretCode)){
-		console.log("Yeaah!");
-		cornify_add();
-	}
-	console.log(pressed);
+const seconds = timeNodes
+.map(node => node.dataset.time)
+.map(timeCode => {
+	const [mins, secs] = timeCode.split(':').map(parseFloat);
+	return (mins*60)+secs;
 })
+.reduce((a,b)=>a + b);
 
-const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
-function strip(bandName) {
-	return bandName.replace(/^(a |the |an )/i, '').trim();
-}
+let secondsLeft = seconds;
+const hours = Math.floor(secondsLeft / 3600);
+secondsLeft = secondsLeft % 3600;
 
-const sortedBands = bands.sort( (a,b)=> strip(a) > strip(b) ? 1 : -1);
-console.log(sortedBands);
+const mins = Math.floor(secondsLeft / 60);
+secondsLeft = secondsLeft % 60;
 
-document.querySelector('#bands').innerHTML = sortedBands.map(elem => `<li>${elem}</li>`).join('');
+console.log(hours, mins, secondsLeft);
